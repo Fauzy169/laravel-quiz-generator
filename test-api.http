@@ -1,0 +1,9 @@
+POST http://127.0.0.1:8000/api/generate-quiz
+Content-Type: application/json
+
+{
+    "kategori": "Matematika",
+    "jumlah": 5,
+    "kesulitan": "Sedang",
+    "level": "SMA"
+}
