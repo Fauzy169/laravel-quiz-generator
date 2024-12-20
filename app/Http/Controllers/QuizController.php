@@ -9,9 +9,7 @@ class QuizController extends Controller
 {
     public function generateQuiz(Request $request)
     {
-
- 
-        // // Validasi input dari form
+        // Validasi input dari form
         $validated = $request->validate([
             'kategori' => 'required|string',
             'jumlah' => 'required|integer',
@@ -19,11 +17,7 @@ class QuizController extends Controller
             'level' => 'required|string',
         ]);
 
-        // // Menyiapkan data untuk permintaan ke API OpenAI
-        // $apiKey = env('GOOGLE_GEMINI'); // Pastikan Anda menambahkan API Key di .env
-
-
-        // // Membuat prompt untuk menghasilkan kuis
+        // Membuat prompt untuk menghasilkan kuis
         $prompt = "
         Anda adalah seorang pembuat soal ujian yang ahli, tugas Anda adalah membuat soal pilihan ganda dengan tema {$validated['kategori']}.
         Buatlah soal pilihan ganda untuk siswa dengan tingkat {$validated['level']} dan kesulitan {$validated['kesulitan']}.
@@ -39,7 +33,6 @@ class QuizController extends Controller
 
         Ulangi format ini sebanyak {$validated['jumlah']} soal.
         ";
-
 
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyC4Ew99f-OgsYGekqg4OjYIgF8MF_H5cL8';
         $data = [
@@ -86,6 +79,5 @@ class QuizController extends Controller
         return response()->json([
             'quizContent' => $quizContent
         ]);
-
     }
 }

@@ -37,7 +37,7 @@
                 </form>
 
                 <!-- This div will display the quiz results -->
-                <div id="quiz-result" class="mt-4 p-3 border rounded-3 shadow-sm bg-white"></div>
+                <div id="quiz-results" class="mt-4"></div>
             </div>
         </div>
     </div>
@@ -50,11 +50,62 @@
 
                 $.post($(this).attr('action'), $(this).serialize())
                     .done(function (data) {
-                        // Ambil konten soal dari respons JSON
                         var quizContent = data.quizContent;
 
-                        // Tampilkan hasil di #quiz-result
-                        $('#quiz-result').html('<pre>' + quizContent + '</pre>');
+                        // Split the quiz content into individual questions
+                        var questions = quizContent.split("\n\n");
+
+                        // Clear previous results
+                        $('#quiz-results').html('');
+
+                        // Loop through each question and create a card for it
+                        questions.forEach(function (question, index) {
+                            // Extract question and options (we assume the format is fixed as per your example)
+                            var questionParts = question.split("\n");
+
+                            // Extract question and answers
+                            var questionText = questionParts[0].replace(/^\d+\.\s/, ''); // Remove question number
+                            var optionA = questionParts[1].replace(/^A\)\s/, '');
+                            var optionB = questionParts[2].replace(/^B\)\s/, '');
+                            var optionC = questionParts[3].replace(/^C\)\s/, '');
+                            var optionD = questionParts[4].replace(/^D\)\s/, '');
+                            var correctAnswer = questionParts[5].replace(/^Jawaban Benar:\s/, '');
+
+                            var questionCard = `
+                                <div class="card mb-3">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Question ${index + 1}</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="mb-3">
+                                            <!-- Question Text -->
+                                            <div class="mb-3">
+                                                <label for="question-${index}" class="form-label">Question</label>
+                                                <input type="text" id="question-${index}" class="form-control" value="${questionText}" required>
+                                            </div>
+
+                                            <!-- Answer Options -->
+                                            <div class="mb-3">
+                                                <label class="form-label">Answer Options</label>
+                                                <div>
+                                                    <input type="text" class="form-control mb-2" value="${optionA}" placeholder="A) Option A" required>
+                                                    <input type="text" class="form-control mb-2" value="${optionB}" placeholder="B) Option B" required>
+                                                    <input type="text" class="form-control mb-2" value="${optionC}" placeholder="C) Option C" required>
+                                                    <input type="text" class="form-control mb-2" value="${optionD}" placeholder="D) Option D" required>
+                                                </div>
+                                            </div>
+
+                                            <!-- Correct Answer -->
+                                            <div class="mb-3">
+                                                <label for="correct-answer-${index}" class="form-label">Correct Answer</label>
+                                                <input type="text" id="correct-answer-${index}" class="form-control" value="${correctAnswer}" required>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            `;
+                            $('#quiz-results').append(questionCard);
+                        });
                     })
                     .fail(function () {
                         alert('Failed to generate quiz.');
