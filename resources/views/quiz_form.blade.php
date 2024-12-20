@@ -38,11 +38,9 @@
             </div>
         </div>
 
-        <!-- Tempatkan hasil quiz di luar card "Generate Quiz" -->
         <div id="quiz-results" class="mt-4"></div>
     </div>
 
-    <!-- Template untuk question card (disembunyikan, nanti akan di-duplicate dengan JavaScript) -->
     <div id="question-template" class="d-none">
         <div class="card mb-3">
             <div class="card-header">
@@ -50,13 +48,11 @@
             </div>
             <div class="card-body">
                 <form class="mb-3">
-                    <!-- Question Text -->
                     <div class="mb-3">
                         <label class="form-label">Question</label>
                         <input type="text" class="form-control question-text" required>
                     </div>
 
-                    <!-- Answer Options -->
                     <div class="mb-3">
                         <label class="form-label">Answer Options</label>
                         <div>
@@ -67,7 +63,6 @@
                         </div>
                     </div>
 
-                    <!-- Correct Answer -->
                     <div class="mb-3">
                         <label class="form-label">Correct Answer</label>
                         <input type="text" class="form-control correct-answer" required>
@@ -87,30 +82,23 @@
                     .done(function (data) {
                         var quizContent = data.quizContent;
 
-                        // Split the quiz content into individual questions
                         var questions = quizContent.split("\n\n");
 
-                        // Clear previous results
                         $('#quiz-results').html('');
 
-                        // Loop through each question and clone the template for it
                         questions.forEach(function (question, index) {
-                            // Extract question and options (we assume the format is fixed as per your example)
                             var questionParts = question.split("\n");
 
-                            // Extract question and answers
-                            var questionText = questionParts[0].replace(/^\d+\.\s/, ''); // Remove question number
+                            var questionText = questionParts[0].replace(/^\d+\.\s/, ''); 
                             var optionA = questionParts[1].replace(/^A\)\s/, '');
                             var optionB = questionParts[2].replace(/^B\)\s/, '');
                             var optionC = questionParts[3].replace(/^C\)\s/, '');
                             var optionD = questionParts[4].replace(/^D\)\s/, '');
                             var correctAnswer = questionParts[5].replace(/^Jawaban Benar:\s/, '');
 
-                            // Clone the template and populate it with data
                             var questionCard = $('#question-template').clone();
-                            questionCard.removeClass('d-none');  // Show the cloned card
+                            questionCard.removeClass('d-none');   
 
-                            // Replace placeholders with actual data
                             questionCard.find('.question-index').text(index + 1);
                             questionCard.find('.question-text').val(questionText);
                             questionCard.find('.option-a').val(optionA);
@@ -119,7 +107,6 @@
                             questionCard.find('.option-d').val(optionD);
                             questionCard.find('.correct-answer').val(correctAnswer);
 
-                            // Append the new question card to #quiz-results
                             $('#quiz-results').append(questionCard);
                         });
                     })
